@@ -64,7 +64,10 @@
 
         {!! Form::label('programelements', 'program elements:') !!}
 
-        {!! Form::text( 'programelements' , null, ['class' => 'form-control']) !!}
+        {!! Form::number( 'programelements' , null, ['class' => 'form-control']) !!}
+        {!! Form::label('lat', 'LATITUDE:') !!}
+
+        {!! Form::input('number' , 'lat', null, ['class' => 'form-control']) !!}
 
 
 
