@@ -95,7 +95,7 @@
         {!! Form::text( 'contactinfo' , null, ['class' => 'form-control']) !!}
 
 
-    {!! Form::submit('Add Article', ['class' => 'btn btn-primary form-control']) !!}
+    {!! Form::submit('Submit', ['class' => 'btn btn-primary form-control']) !!}
 
     {!! Form::close() !!}
 
