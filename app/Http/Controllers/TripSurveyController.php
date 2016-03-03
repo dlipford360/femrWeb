@@ -20,7 +20,6 @@ class TripSurveyController extends Controller
     public function show($id)
     {
         $survey = Survey::find($id);
-
         return view('tripsurvey.show', compact('survey'));
     }
 
