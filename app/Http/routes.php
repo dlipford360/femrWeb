@@ -42,7 +42,9 @@ Route::get('/users/xml', function() {
 		$xml->startElement('marker');
 		$xml->writeAttribute('lat', $place->lat);
 		$xml->writeAttribute('lng', $place->lng);
+
 		foreach($place->surveys as $index => $survey){
+			$xml->writeAttribute('id'.$index, $survey->id);
 
 			$xml->writeAttribute('teamname'.$index, $survey->teamname);
 
