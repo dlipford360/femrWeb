@@ -35,7 +35,6 @@ Route::get('test', function() {
 Route::get('/users/xml', function() {
 	$surveys = Survey::all();
 
-
 	$xml = new XMLWriter();
 	$xml->openMemory();
 	$xml->startDocument();
