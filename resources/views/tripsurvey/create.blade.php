@@ -2,12 +2,31 @@
 
 
 @section('content')
-    <div class = "container">
-
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="panel panel-default">
+                        <div class="panel-heading"><center><h1>Write Survey</h1></center></div>
+                    <div class="panel-body">
         <!--Print to web page-->
-    <h1> write survey</h1>
 
-        <!--url for the Literature Bank survey-->
+
+            <div class="col-sm-6">
+{{--This did not work, tried to get approval message displayed on the form RD --}}
+                {{--@if(Session::has('flash_message'))--}}
+                    {{--<div class="alert alert-success">--}}
+                        {{--{{ Session::get('flash_message') }}--}}
+                    {{--</div>--}}
+                {{--@endif--}}
+{{--*********************************************************--}}
+{{--This displays an error message if required fields are left blank - RD--}}
+        @if($errors->any())
+            <div class="alert alert-danger">
+                @foreach($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
+            </div>
+        @endif
         {!! Form::open(['url' => 'tripsurvey']) !!}
 
         <!--Use a form to get the variables from the Literature Bank survey-->
@@ -88,7 +107,14 @@
 
 <!--Submit and close form-->
     {!! Form::submit('Submit', ['class' => 'btn btn-primary form-control']) !!}
-    {!! Form::close() !!}
 
+    {!! Form::close() !!}
+            {{--</label>--}}
+
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
     </div>
 @endsection

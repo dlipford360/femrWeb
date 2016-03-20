@@ -33,4 +33,3 @@ class CreateLiteraturesTable extends Migration
         Schema::drop('literatures');
     }
 }
-

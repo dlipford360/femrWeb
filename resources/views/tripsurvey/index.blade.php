@@ -1,8 +1,14 @@
 @extends('layouts.app')
 
+
 @section('content')
 
-    <!--Print to web page-->
-    <h1>Survey</h1>
+    <div class = "container">
 
+
+    <!--Print to web page-->
+    <h1>Your survey was submitted for approval.</h1>
+
+
+    </div>
 @endsection()

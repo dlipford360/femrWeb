@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Survey;
-//use Illuminate\Http\Request;
-use Request;
+use App\Place;
+use Illuminate\Http\Request;
+//use Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -29,11 +30,35 @@ class TripSurveyController extends Controller
     }
 
     //Redirect to the Trip Survey page
-    public function store()
+    public function store(Request $request)
     {
-        $input = Request::all();
-        Survey::create($input);
-       return redirect('tripsurvey');
+        $this->validate($request, [
+            'teamname' => 'required',
+
+        ]);
+
+        //$input = Request::all();
+        $input = $request->except('lat', 'lng');
+
+        $survey = new Survey($input);
+        $survey->status = false;
+        $input2 = $request->only('lat', 'lng');
+       // $place = Place::where('lat', '=', $input2['lat'])->where('lng', '=', $input2['lng'])->findOrFail(1);
+        //$place = Place::where('lat', '=', '5')->firstOrFail();
+        $place = Place::firstOrNew(['lat' => $input2['lat'], 'lng' => $input2['lng']]);
+
+
+        $survey->save();
+        //$place->survey_id = $survey->id;
+       // dd($place);
+        $survey->places()->save($place);
+       // $place->surveys()->save($survey);
+
+//        Session::flash('flash_message', 'Survey successfully submitted!');{{--This did not work RD --}}
+
+
+        return redirect('emails');
     }
+//
 
 }

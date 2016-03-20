@@ -26,4 +26,9 @@ class Survey extends Model
                 'adminsupport',
                 'contactinfo'
         ];
+
+        public function places()
+        {
+                return $this->belongsToMany('App\Place');
+        }
 }

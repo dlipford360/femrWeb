@@ -1,6 +1,6 @@
 <?php
 use App\Survey;
-
+use App\Place;
 /*
 |--------------------------------------------------------------------------
 | Routes File
@@ -12,40 +12,40 @@ use App\Survey;
 |
 */
 
+
 Route::get('/', function () {
     //echo 'Welcome to my site';
     return view('welcome');
 });
 
-//Calls the Trip Database controller, which controls the Trip Database web page
-Route::get('tripdatabase', 'TripDatabaseController@index');
-
-//Calls the Literature Bank controller, which controls the Literature Bank web page
-Route::get('literaturebank', 'LiteratureBankController@index');
-
-Route::get('hello/{name}', function ($name){
-	echo 'Hello There ' . $name;
-});
-//Create an item
-Route::get('test', function() {
-	echo 'POST';
-});
-
 //Convert database entries to xml form
 Route::get('/users/xml', function() {
 	$surveys = Survey::all();
+<<<<<<< HEAD
 
+=======
+	$places = Place::all();
+>>>>>>> cea1b3aca8d27b3ccfb4979046f8f6a63eb2ff98
 	$xml = new XMLWriter();
 	$xml->openMemory();
 	$xml->startDocument();
 	$xml->startElement('markers');
-	foreach($surveys as $survey) {
+	foreach($places as $place) {
+		$teams = '';
+
 		$xml->startElement('marker');
-		$xml->writeAttribute('id', $survey->id);
-		$xml->writeAttribute('teamname', $survey->teamname);
-		$xml->writeAttribute('lat', $survey->lat);
-		$xml->writeAttribute('lng', $survey->lng);
+		$xml->writeAttribute('lat', $place->lat);
+		$xml->writeAttribute('lng', $place->lng);
+		foreach($place->surveys as $index => $survey){
+			$xml->writeAttribute('id'.$index, $survey->id);
+			$xml->writeAttribute('teamname'.$index, $survey->teamname);
+
+
+		}
 		$xml->endElement();
+
+
+
 	}
 	$xml->endElement();
 	$xml->endDocument();
@@ -55,22 +55,6 @@ Route::get('/users/xml', function() {
 
 	return response($content)->header('Content-Type', 'text/xml');
 });
-
-//Read an item
-Route::get('test', function(){
-	echo '<form method = "POST" action="test">';
-	echo '<input type="submit">';
-	echo '<input type="hidden" value="DELETE" name="_method">';
-	echo '<form>';
-
-});
-
-//Delete an item
-Route::delete('test', function(){
-	echo 'DELETE';
-});
-
-
 
 
 /*
@@ -84,40 +68,58 @@ Route::delete('test', function(){
 |
 */
 
-Route::group(['middleware' => ['web']], function () {
-    //
-});
 
-//Call appropriate controllers (which control the Trip Survey web page and survey)
-Route::group(['middleware' => 'web'], function () {
-	Route::get('/tripsurvey', 'TripSurveyController@index');
-	Route::get('/tripsurvey/create', 'TripSurveyController@create');
-	Route::post('/tripsurvey', 'TripSurveyController@store');
-	Route::get('/tripsurvey/{id}', 'TripSurveyController@show');
+Route::group(['middleware' => 'web'], function ()
+{
 
-    Route::auth();
 
+	//Calls the Trip Database controller, which controls the Trip Database web page
+	Route::get('tripdatabase', 'TripDatabaseController@index');
+
+
+	//Calls the Literature Bank controller, which controls the Literature Bank web page
+	Route::get('literaturebank', 'LiteratureBankController@index');
+
+
+//	Call the discussion board page
+	Route::get('discussionboard', 'discussionboardController@index');
+
+	//sends email
+	Route::get('/emails', 'EmailController@index');
+	Route::get('/emails/test', 'EmailController@index');
+
+
+	//pulls the authorization page
+	Route::auth();
+
+//	all pages inside this group must be logged in to use
 	Route::group([ 'middleware' => 'auth' ], function ()
 	{
 		Route::get('/home', 'HomeController@index');
 		Route::get('/home/{user}', 'HomeController@test');
 
-	});
+		//Call appropriate controllers (which control the Trip Survey web page and survey)
+		Route::get('/tripsurvey', 'TripSurveyController@index');
+		Route::get('/tripsurvey/create', 'TripSurveyController@create');
+		Route::post('/tripsurvey', 'TripSurveyController@store');
+		Route::get('/tripsurvey/{id}', 'TripSurveyController@show');
 
-	//Call appropriate controllers (which control the Literature Bank web page and survey)
-	Route::group(['middleware' => 'web'], function () {
+		//	Calls the literature bank web page and create function
 		Route::get('/litbanksurvey', 'LiteratureBankSurveyController@index');
 		Route::get('/litbanksurvey/create', 'LiteratureBankSurveyController@create');
 		Route::post('/litbanksurvey', 'LiteratureBankSurveyController@store');
 		Route::get('/litbanksurvey/{id}', 'LiteratureBankSurveyController@show');
 
-		Route::auth();
+		//	gets the approvals page
+		Route::get('/approvals/edit','ApprovalsController@edit');
+//	stores the updated information
+		Route::post('/approvals', 'ApprovalsController@update');
 
-		Route::group(['middleware' => 'auth'], function () {
-			Route::get('/home', 'HomeController@index');
-			Route::get('/home/{user}', 'HomeController@test');
+		//Route::get('/approvals','ApprovalsController@update');
 
-		});
+		//Route::get('approvals/(:any)/edit','ApprovalsController@edit');
+
+
 	});
 
 	//Call the upload function
@@ -126,4 +128,10 @@ Route::group(['middleware' => 'web'], function () {
 	});
 	Route::post('apply/upload', 'LiteratureBankController@upload');
 });
+
+
+
+
+
+
 
